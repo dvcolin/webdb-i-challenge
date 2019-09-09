@@ -58,6 +58,29 @@ router.delete('/:id', validateAccountId, (req, res) => {
     })
 })
 
+// PUT /accounts/id
+
+
+router.put('/:id', validateAccountId, (req, res) => {
+    const changes = req.body;
+    const { id } = req.params;
+
+    if (!Object.keys(changes).length) {
+        res.status(400).json({ message: 'Please update the name or budget field.' });
+    } else if (!changes.name && !changes.budget) {
+        res.status(400).json({ message: 'Please update the name or budget field.' });
+    }
+    else {
+        db('accounts').where('id', id).update(changes)
+        .then(updated => {
+            res.status(200).json(updated)
+        })
+        .catch(err => {
+            res.status(500).json(err)
+        })
+    }
+})
+
 function validateAccountId (req, res, next) {
     const accountBody = req.body;
     const { id } = req.params;
