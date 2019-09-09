@@ -44,6 +44,20 @@ router.post('/', validateAccount, (req, res) => {
     })
 })
 
+
+// DELETE /accounts/id
+
+router.delete('/:id', validateAccountId, (req, res) => {
+    const { id } = req.params;
+    db('accounts').where('id', id).delete()
+    .then(deleted => {
+        res.status(200).json(deleted)
+    })
+    .catch(err => {
+        res.status(500).json(err)
+    })
+})
+
 function validateAccountId (req, res, next) {
     const accountBody = req.body;
     const { id } = req.params;
